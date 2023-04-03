@@ -1,14 +1,14 @@
 import type { 
-  IAPIREST, 
-  IAPIEndpoint, 
-  IAPIMethods, 
+  IAirServer, 
+  IAirEndPoint, 
+  IAirMethods, 
   IEndpointPayload, 
   IEndpointResponse 
 } from "./types";
 
 
 
-export function stringifyPayload( payload : IEndpointPayload ){
+export function stringifyPayload( payload : IEndpointPayload ) : string[]{
 
   const out : string[] = [];
 
@@ -56,13 +56,16 @@ export function render<R extends IEndpointResponse>(
 
 export function useEndpoint<P extends IEndpointPayload, R extends IEndpointResponse>(){
 
-  return new APIEndpoint<P, R>();
+  return new AirEndPoint<P, R>();
     
 }
 
-export class APIEndpoint<P extends IEndpointPayload, R extends IEndpointResponse> implements IAPIEndpoint<P, R>{
+/**
+ * Création d'un point de chute
+ */
+export class AirEndPoint<P extends IEndpointPayload, R extends IEndpointResponse> implements IAirEndPoint<P, R>{
 
-  #rest : IAPIREST | undefined = undefined;
+  #rest : IAirServer | undefined = undefined;
 
   #route : string | number = '';
 
@@ -70,7 +73,7 @@ export class APIEndpoint<P extends IEndpointPayload, R extends IEndpointResponse
   
   // #response: R = {} as R;
 
-  #method: IAPIMethods = 'GET';
+  #method: IAirMethods = 'GET';
 
 
   get _route(){ return this.#route; }
@@ -82,7 +85,11 @@ export class APIEndpoint<P extends IEndpointPayload, R extends IEndpointResponse
   get _method(){ return this.#method; }
 
 
-use( rest : IAPIREST ){
+  /**
+   * Utilisation avec un serveur de points de chutes
+   * @param rest 
+   */
+  use( rest : IAirServer ){
 
     this.#rest = rest;
 
@@ -90,7 +97,7 @@ use( rest : IAPIREST ){
       
   }
   
-  method( method : IAPIMethods ){
+  method( method : IAirMethods ){
 
     this.#method = method;
 
@@ -159,7 +166,7 @@ use( rest : IAPIREST ){
 
 
 
-export default class APIREST implements IAPIREST{
+export class AirServer implements IAirServer{
 
     server : string;
 
@@ -173,7 +180,7 @@ export default class APIREST implements IAPIREST{
 
     }
 
-    post<R extends IEndpointResponse>( endpoint : IAPIEndpoint<IEndpointPayload, R> ): Promise<R>{
+    post<R extends IEndpointResponse>( endpoint : IAirEndPoint<IEndpointPayload, R> ): Promise<R>{
   
       return render<R>(
         
@@ -189,7 +196,7 @@ export default class APIREST implements IAPIREST{
   
     }
 
-    get<R extends IEndpointResponse>( endpoint : IAPIEndpoint<IEndpointPayload, R> ){
+    get<R extends IEndpointResponse>( endpoint : IAirEndPoint<IEndpointPayload, R> ){
 
       const query = endpoint._payload ? stringifyPayload( endpoint._payload ).join('&') : ''; 
   
@@ -205,7 +212,7 @@ export default class APIREST implements IAPIREST{
     
     }
 
-    put<R extends IEndpointResponse>( endpoint : IAPIEndpoint<IEndpointPayload, R> ){
+    put<R extends IEndpointResponse>( endpoint : IAirEndPoint<IEndpointPayload, R> ){
   
       return render<R>(
         
@@ -221,7 +228,7 @@ export default class APIREST implements IAPIREST{
     
     }
 
-    patch<R extends IEndpointResponse>( endpoint : IAPIEndpoint<IEndpointPayload, R> ){
+    patch<R extends IEndpointResponse>( endpoint : IAirEndPoint<IEndpointPayload, R> ){
   
       return render<R>(
         
@@ -237,7 +244,7 @@ export default class APIREST implements IAPIREST{
   
     }
 
-    delete<R extends IEndpointResponse>( endpoint : IAPIEndpoint<IEndpointPayload, R> ){
+    delete<R extends IEndpointResponse>( endpoint : IAirEndPoint<IEndpointPayload, R> ){
   
       return render<R>(
         
@@ -253,4 +260,16 @@ export default class APIREST implements IAPIREST{
     
     }
 
+}
+
+
+
+
+
+export default class AirRest{
+
+  static Server = AirServer;
+
+  static Endpoint = AirEndPoint;
+  
 }

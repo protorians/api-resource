@@ -1,4 +1,4 @@
-import APIREST, { useEndpoint } from "./index";
+import AirREST, { useEndpoint } from "./index";
 import { IEndpointPayload, IEndpointResponse } from "./types";
 
 
@@ -18,7 +18,7 @@ interface myResponse extends IEndpointResponse{
 
 
 
-const myAPIServer = () => new APIREST('https://example.com/api', {
+const myAirServer = () => new AirREST.Server('https://example.com/api', {
   
   cache: 'no-store',
 
@@ -28,7 +28,7 @@ const myAPIServer = () => new APIREST('https://example.com/api', {
 const myEndpoint = () => useEndpoint<
   myPayload, 
   myResponse
->().use( myAPIServer() ).route('/connect').method('POST')
+>().use( myAirServer() ).route('/connect').method('POST')
 
 // Usage
 myEndpoint().payload({

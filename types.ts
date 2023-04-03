@@ -1,18 +1,18 @@
-export declare type IAPIMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export declare type IAirMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-export declare interface IAPIEndpoint<P extends IEndpointPayload, R extends IEndpointResponse>{
+export declare interface IAirEndPoint<P extends IEndpointPayload, R extends IEndpointResponse>{
 
 	_route : string | number;
 
 	_payload: IEndpointPayload;
 
-	_method: IAPIMethods;
+	_method: IAirMethods;
 	
 	// _responses: IEndpointResponse;
 
-	use( rest : IAPIREST ) : this;
+	use( server : IAirServer ) : this;
 
-	method( method : IAPIMethods ) : this;
+	method( method : IAirMethods ) : this;
 
 	route( route : string | number ) : this;
 
@@ -44,20 +44,20 @@ export declare type AirStackEndPoints = {
 
 
 
-export interface IAPIREST{
+export interface IAirServer{
 
 	server : string;
 
 	options : RequestInit | undefined;
 
-	post<R extends IEndpointResponse>( stack : IAPIEndpoint<IEndpointPayload, R> ) : Promise<R>;
+	post<R extends IEndpointResponse>( stack : IAirEndPoint<IEndpointPayload, R> ) : Promise<R>;
 
-	get<R extends IEndpointResponse>( stack : IAPIEndpoint<IEndpointPayload, R> ) : Promise<R>;
+	get<R extends IEndpointResponse>( stack : IAirEndPoint<IEndpointPayload, R> ) : Promise<R>;
 
-	put<R extends IEndpointResponse>( stack : IAPIEndpoint<IEndpointPayload, R> ) : Promise<R>;
+	put<R extends IEndpointResponse>( stack : IAirEndPoint<IEndpointPayload, R> ) : Promise<R>;
 
-	patch<R extends IEndpointResponse>( stack : IAPIEndpoint<IEndpointPayload, R> ) : Promise<R>;
+	patch<R extends IEndpointResponse>( stack : IAirEndPoint<IEndpointPayload, R> ) : Promise<R>;
 
-	delete<R extends IEndpointResponse>( stack : IAPIEndpoint<IEndpointPayload, R> ) : Promise<R>;
+	delete<R extends IEndpointResponse>( stack : IAirEndPoint<IEndpointPayload, R> ) : Promise<R>;
 	
 }
