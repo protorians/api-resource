@@ -430,7 +430,7 @@ render('https//exemple.com/test', {
 
 ---
 
-## License
+## License MIT
 
 Copyright 2023 — Protorians
 
