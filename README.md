@@ -30,7 +30,7 @@ import { AirEndPoint, AirServer } from "@protorians/air-rest";
 
 ---
 
-# Typage
+# Typages
 
 ## IAirMethods
 
@@ -52,7 +52,9 @@ import { AirEndPoint, AirServer } from "@protorians/air-rest";
 }
 ```
 
-### À vous de déinir : Payload — Charge utile
+---
+
+### À vous de définir : Payload — Charge utile
 
 Définir la liste des paramètres à passer dans le body du fetch (BodyInit) sous forme d'object
 
@@ -62,7 +64,7 @@ interface myPayload extends IEndpointPayload {
 }
 ```
 
-### À vous de déinir : Réponses
+### À vous de définir : Réponses
 
 Définir la réponse attendu.
 
