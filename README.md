@@ -25,7 +25,7 @@ import AirREST from "@protorians/air-rest";
 ```
 
 ```typescript
-import { AirEndPoint, AirServer } from "@protorians/air-rest";
+import { AirRestEndPoint, AirRestServer } from "@protorians/air-rest";
 ```
 
 ---
@@ -82,7 +82,7 @@ interface myResponse extends IEndpointResponse {
 ## Serveur des points de chute
 
 ```typescript
-const myAirServer = () =>
+const myAirRestServer = () =>
   new AirREST.Server("https://example.com/api", {
     cache: "no-store",
   });
@@ -95,7 +95,7 @@ Méthode GET
 ```typescript
 const myEndpoint = () =>
   useEndpoint<myPayload, myResponse>()
-    .use(myAirServer())
+    .use(myAirRestServer())
     .route("/my-end-point")
     .method("GET");
 ```
@@ -105,7 +105,7 @@ Méthode POST
 ```typescript
 const myEndpoint = () =>
   useEndpoint<myPayload, myResponse>()
-    .use(myAirServer())
+    .use(myAirRestServer())
     .route("/my-end-point")
     .method("POST");
 ```
@@ -115,7 +115,7 @@ Méthode PUT
 ```typescript
 const myEndpoint = () =>
   useEndpoint<myPayload, myResponse>()
-    .use(myAirServer())
+    .use(myAirRestServer())
     .route("/my-end-point")
     .method("PUT");
 ```
@@ -125,7 +125,7 @@ Méthode PATCH
 ```typescript
 const myEndpoint = () =>
   useEndpoint<myPayload, myResponse>()
-    .use(myAirServer())
+    .use(myAirRestServer())
     .route("/my-end-point")
     .method("PATCH");
 ```
@@ -135,7 +135,7 @@ Méthode DELETE
 ```typescript
 const myEndpoint = () =>
   useEndpoint<myPayload, myResponse>()
-    .use(myAirServer())
+    .use(myAirRestServer())
     .route("/my-end-point")
     .method("DELETE");
 ```
@@ -155,99 +155,99 @@ myEndpoint()
 
 ---
 
-# Classe : AirServer
+# Classe : AirRestServer
 
-## AirServer
+## AirRestServer
 
 Création du server de point de chute
 
 ```typescript
-const server = new AirServer("https://exemple.com/api");
+const server = new AirRestServer("https://exemple.com/api");
 ```
 
 Avec options
 
 ```typescript
-const server = new AirServer("https://exemple.com/api", {
+const server = new AirRestServer("https://exemple.com/api", {
   cache: "no-store",
 });
 ```
 
 \* Les options sont du même type que ceux de la fonction fecth `RequestInit`
 
-## AirServer.post
+## AirRestServer.post
 
 Resoudre le point de chute avec la méthode `POST`
 
 ```typescript
-const server = new AirServer("https://exemple.com/api");
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const server = new AirRestServer("https://exemple.com/api");
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 ...
 server.post<ResponseInterface>( endpoint ).then( response => console.log(response) )
 ```
 
-## AirServer.get
+## AirRestServer.get
 
 Resoudre le point de chute avec la méthode `GET`
 
 ```typescript
-const server = new AirServer("https://exemple.com/api");
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const server = new AirRestServer("https://exemple.com/api");
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 ...
 server.get<ResponseInterface>( endpoint ).then( response => console.log(response) )
 ```
 
-## AirServer.put
+## AirRestServer.put
 
 Resoudre le point de chute avec la méthode `PUT`
 
 ```typescript
-const server = new AirServer("https://exemple.com/api");
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const server = new AirRestServer("https://exemple.com/api");
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 ...
 server.put<ResponseInterface>( endpoint ).then( response => console.log(response) )
 ```
 
-## AirServer.patch
+## AirRestServer.patch
 
 Resoudre le point de chute avec la méthode `PATCH`
 
 ```typescript
-const server = new AirServer("https://exemple.com/api");
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const server = new AirRestServer("https://exemple.com/api");
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 ...
 server.patch<ResponseInterface>( endpoint ).then( response => console.log(response) )
 ```
 
-## AirServer.delete
+## AirRestServer.delete
 
 Resoudre le point de chute avec la méthode `DELETE`
 
 ```typescript
-const server = new AirServer("https://exemple.com/api");
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const server = new AirRestServer("https://exemple.com/api");
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 ...
 server.delete<ResponseInterface>( endpoint ).then( response => console.log(response) )
 ```
 
 ---
 
-# Classe : AirEndPoint
+# Classe : AirRestEndPoint
 
-## AirEndPoint
+## AirRestEndPoint
 
 Création d'un point de chute
 
 ```typescript
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 ```
 
-## AirEndPoint.\_route
+## AirRestEndPoint.\_route
 
 La route utilisé
 
 ```typescript
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 endpoint.route("/test");
 console.log(endpoint._route); // test
 
@@ -255,12 +255,12 @@ endpoint.route("/hello");
 console.log(endpoint._route); // hello
 ```
 
-## AirEndPoint.\_payload
+## AirRestEndPoint.\_payload
 
 Les paramètres de la requête utilisé
 
 ```typescript
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 endpoint.payload({
   test: "test",
 });
@@ -272,12 +272,12 @@ endpoint.payload({
 console.log(endpoint._payload); // { "test" : hello" }
 ```
 
-## AirEndPoint.\_method
+## AirRestEndPoint.\_method
 
 La méthode de la requête utilisé
 
 ```typescript
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 endpoint.method("GET");
 console.log(endpoint._method); // GET
 
@@ -285,39 +285,39 @@ endpoint.method("POST");
 console.log(endpoint._method); // POST
 ```
 
-## AirEndPoint.use
+## AirRestEndPoint.use
 
 Utilisation avec un serveur de points de chutes
 
 ```typescript
-const server = new AirServer();
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const server = new AirRestServer();
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 endpoint.use(server);
 ```
 
-## AirEndPoint.method
+## AirRestEndPoint.method
 
 Definir la méthode de la requête
 
 - method : `IAirMethods`
 
 ```typescript
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 endpoint.method("GET");
 ```
 
-## AirEndPoint.route
+## AirRestEndPoint.route
 
 Definir la route du point de chute de la requête
 
 - route : `string`
 
 ```typescript
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 endpoint.route("/my-endpoint-route");
 ```
 
-## AirEndPoint.slugs
+## AirRestEndPoint.slugs
 
 Definir des variables et leurs positions dans la route. Dans le cadre où la route serait générique, donc comporterait par exemple des sous-dossiers.
 
@@ -327,42 +327,42 @@ Exemple :
 Pour `my-endpoint-route/{user-id}`, la route à utiliser doit être `my-endpoint-route/{$1}`
 
 ```typescript
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 endpoint.route("/my-endpoint-route/$1").slugs("user-id-here");
 ```
 
-## AirEndPoint.payload
+## AirRestEndPoint.payload
 
 Definir la charge utile (paramètres dans la requête) à envoyer au point de chute.
 
 - payload : `PayloadInterface`
 
 ```typescript
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 endpoint.payload({
   param1: "value-1",
   param2: "value-2",
 });
 ```
 
-## AirEndPoint.send
+## AirRestEndPoint.send
 
 Resoudre le point de chute executant les caratéristiques construites
 
 ```typescript
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 endpoint.send();
 ```
 
 Exemple de construction de point de chute
 
 ```typescript
-const endpoint = new AirEndPoint<PayloadInterface, ResponseInterface>();
+const endpoint = new AirRestEndPoint<PayloadInterface, ResponseInterface>();
 endpoint
 
   // Definition du serveur
   .use(
-    new AirServer("https://example.com/api", {
+    new AirRestServer("https://example.com/api", {
       cache: "no-store",
     })
   )
@@ -402,7 +402,7 @@ console.log(query);
 
 # Fonctionnalité : useEndpoint
 
-Retourne une nouvelle instance de `AirEndPoint` pour enchaîner les définitions.
+Retourne une nouvelle instance de `AirRestEndPoint` pour enchaîner les définitions.
 
 ```typescript
 useEndpoint<PayloadInterface, ResponseInterface>().route('/end-point-route')...

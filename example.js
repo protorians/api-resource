@@ -1,9 +1,9 @@
 import AirREST, { useEndpoint } from "./index";
-const myAirServer = () => new AirREST.Server('https://example.com/api', {
+const myAirRestServer = () => new AirREST.Server('https://example.com/api', {
     cache: 'no-store',
 });
 // Déclaration
-const myEndpoint = () => useEndpoint().use(myAirServer()).route('/connect').method('POST');
+const myEndpoint = () => useEndpoint().use(myAirRestServer()).route('/connect').method('POST');
 // Usage
 myEndpoint().payload({
     id: 7

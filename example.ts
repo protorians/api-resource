@@ -2,13 +2,13 @@ import AirREST, { useEndpoint } from "./index";
 import { IEndpointPayload, IEndpointResponse } from "./types";
 
 
-interface myPayload extends IEndpointPayload{
+interface myPayload extends IEndpointPayload {
 
   id: number;
 
 }
 
-interface myResponse extends IEndpointResponse{
+interface myResponse extends IEndpointResponse {
 
   response: boolean;
 
@@ -18,23 +18,23 @@ interface myResponse extends IEndpointResponse{
 
 
 
-const myAirServer = () => new AirREST.Server('https://example.com/api', {
-  
+const myAirRestServer = () => new AirREST.Server('https://example.com/api', {
+
   cache: 'no-store',
 
 })
 
 // Déclaration
 const myEndpoint = () => useEndpoint<
-  myPayload, 
+  myPayload,
   myResponse
->().use( myAirServer() ).route('/connect').method('POST')
+>().use(myAirRestServer()).route('/connect').method('POST')
 
 // Usage
 myEndpoint().payload({
   id: 7
-}).send()?.then(response =>{
+}).send()?.then(response => {
 
-  console.log( 'Response', response )
-  
+  console.log('Response', response)
+
 })
