@@ -166,6 +166,25 @@ export class AirRestEndPoint<P extends IEndpointPayload, R extends IEndpointResp
 
 
 
+export function transpilatePayload(payload?: object): BodyInit {
+
+  const formData = new FormData();
+
+  if (payload) {
+
+    Object.entries(payload).forEach(({ 0: name, 1: value }) =>
+
+      formData.append(name, value)
+
+    )
+
+  }
+
+  return formData;
+
+}
+
+
 export class AirRestServer implements IAirRestServer {
 
   server: string;
@@ -188,7 +207,7 @@ export class AirRestServer implements IAirRestServer {
 
       method: 'POST',
 
-      body: JSON.stringify((endpoint._payload || null) as BodyInit),
+      body: transpilatePayload(endpoint._payload),
 
     }
 
@@ -224,7 +243,7 @@ export class AirRestServer implements IAirRestServer {
 
       method: 'PUT',
 
-      body: JSON.stringify((endpoint._payload || null) as BodyInit),
+      body: transpilatePayload(endpoint._payload),
 
     }
 
@@ -242,7 +261,7 @@ export class AirRestServer implements IAirRestServer {
 
       method: 'PATCH',
 
-      body: JSON.stringify((endpoint._payload || null) as BodyInit),
+      body: transpilatePayload(endpoint._payload),
 
     }
 
@@ -260,7 +279,7 @@ export class AirRestServer implements IAirRestServer {
 
       method: 'DELETE',
 
-      body: JSON.stringify((endpoint._payload || null) as BodyInit),
+      body: transpilatePayload(endpoint._payload),
 
     })
 

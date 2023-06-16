@@ -90,6 +90,13 @@ export class AirRestEndPoint {
     }
 }
 _AirRestEndPoint_rest = new WeakMap(), _AirRestEndPoint_route = new WeakMap(), _AirRestEndPoint_payload = new WeakMap(), _AirRestEndPoint_method = new WeakMap();
+export function transpilatePayload(payload) {
+    const formData = new FormData();
+    if (payload) {
+        Object.entries(payload).forEach(({ 0: name, 1: value }) => formData.append(name, value));
+    }
+    return formData;
+}
 export class AirRestServer {
     constructor(server, options) {
         this.server = server;
@@ -98,7 +105,7 @@ export class AirRestServer {
     post(endpoint) {
         return render(`${this.server}${endpoint._route}`, {
             method: 'POST',
-            body: JSON.stringify((endpoint._payload || null)),
+            body: transpilatePayload(endpoint._payload),
         });
     }
     get(endpoint) {
@@ -112,21 +119,21 @@ export class AirRestServer {
         return render(`${this.server}${endpoint._route}`, {
             ...this.options,
             method: 'PUT',
-            body: JSON.stringify((endpoint._payload || null)),
+            body: transpilatePayload(endpoint._payload),
         });
     }
     patch(endpoint) {
         return render(`${this.server}${endpoint._route}`, {
             ...this.options,
             method: 'PATCH',
-            body: JSON.stringify((endpoint._payload || null)),
+            body: transpilatePayload(endpoint._payload),
         });
     }
     delete(endpoint) {
         return render(`${this.server}${endpoint._route}`, {
             ...this.options,
             method: 'DELETE',
-            body: JSON.stringify((endpoint._payload || null)),
+            body: transpilatePayload(endpoint._payload),
         });
     }
 }

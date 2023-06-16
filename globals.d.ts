@@ -26,6 +26,7 @@ declare module '@protorians/air-rest/index' {
       payload(payload: P): this;
       send(): Promise<R> | undefined;
   }
+  export function transpilatePayload(payload?: object): BodyInit;
   export class AirRestServer implements IAirRestServer {
       server: string;
       options: RequestInit | undefined;
