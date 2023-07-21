@@ -13,8 +13,9 @@ declare module '@protorians/air-rest/index' {
   export class AirRestEndPoint<P extends IEndpointPayload, R extends IEndpointResponse> implements IAirRestEndPoint<P, R> {
       #private;
       get _route(): string | number;
-      get _payload(): P;
+      get _payload(): FormData | P;
       get _method(): IAirMethods;
+      get _transpilate(): boolean;
       /**
        * Utilisation avec un serveur de points de chutes
        * @param rest
@@ -22,7 +23,8 @@ declare module '@protorians/air-rest/index' {
       use(rest: IAirRestServer): this;
       method(method: IAirMethods): this;
       route(route: string | number): this;
-      form(form: HTMLFormElement): this;
+      useForm(form: HTMLFormElement): this;
+      useFormData(formData: FormData): this;
       slugs(...slugs: (string | number)[]): this;
       payload(payload: P): this;
       send(): Promise<R> | undefined;
@@ -32,8 +34,8 @@ declare module '@protorians/air-rest/index' {
       server: string;
       options: RequestInit | undefined;
       constructor(server: string, options: RequestInit | undefined);
-      post<R extends IEndpointResponse>(endpoint: IAirRestEndPoint<IEndpointPayload, R>): Promise<R>;
       get<R extends IEndpointResponse>(endpoint: IAirRestEndPoint<IEndpointPayload, R>): Promise<R>;
+      post<R extends IEndpointResponse>(endpoint: IAirRestEndPoint<IEndpointPayload, R>): Promise<R>;
       put<R extends IEndpointResponse>(endpoint: IAirRestEndPoint<IEndpointPayload, R>): Promise<R>;
       patch<R extends IEndpointResponse>(endpoint: IAirRestEndPoint<IEndpointPayload, R>): Promise<R>;
       delete<R extends IEndpointResponse>(endpoint: IAirRestEndPoint<IEndpointPayload, R>): Promise<R>;
@@ -48,15 +50,17 @@ declare module '@protorians/air-rest/types' {
   export type IAirMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   export interface IAirRestEndPoint<P extends IEndpointPayload, R extends IEndpointResponse> {
       _route: string | number;
-      _payload: IEndpointPayload;
+      _payload: IEndpointPayload | FormData;
       _method: IAirMethods;
+      _transpilate: boolean;
       use(server: IAirRestServer): this;
       method(method: IAirMethods): this;
       route(route: string | number): this;
       slugs(...slugs: (string | number)[]): this;
       payload(payload: P): this;
       send(): Promise<R> | undefined;
-      form(form: HTMLFormElement): this;
+      useForm(form: HTMLFormElement): this;
+      useFormData(formData: FormData): this;
   }
   export type IEndpointResponse = {
       [R: string]: any;

@@ -4,9 +4,11 @@ export declare interface IAirRestEndPoint<P extends IEndpointPayload, R extends 
 
 	_route: string | number;
 
-	_payload: IEndpointPayload;
+	_payload: IEndpointPayload | FormData;
 
 	_method: IAirMethods;
+
+	_transpilate: boolean;
 
 	// _responses: IEndpointResponse;
 
@@ -24,7 +26,9 @@ export declare interface IAirRestEndPoint<P extends IEndpointPayload, R extends 
 
 	send(): Promise<R> | undefined;
 
-	form(form: HTMLFormElement): this
+	useForm(form: HTMLFormElement): this;
+
+	useFormData(formData: FormData): this;
 
 }
 

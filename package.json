@@ -1,6 +1,6 @@
 {
   "name": "@protorians/air-rest",
-  "version": "0.1.3",
+  "version": "0.1.6",
   "description": "api rest manager",
   "main": "index.js",
   "type": "module",

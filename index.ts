@@ -69,20 +69,23 @@ export class AirRestEndPoint<P extends IEndpointPayload, R extends IEndpointResp
 
   #route: string | number = '';
 
-  #payload: P = {} as P;
-
-  // #response: R = {} as R;
+  #payload: P | FormData = {} as (P | FormData);
 
   #method: IAirMethods = 'GET';
+
+  #transpilate: boolean = true;
+
 
 
   get _route() { return this.#route; }
 
   get _payload() { return this.#payload; }
 
-  // get _responses(){ return this.#response; }
-
   get _method() { return this.#method; }
+
+  get _transpilate() { return this.#transpilate; }
+
+
 
 
   /**
@@ -113,15 +116,30 @@ export class AirRestEndPoint<P extends IEndpointPayload, R extends IEndpointResp
 
   }
 
-  form(form: HTMLFormElement) {
 
-    const data = new FormData(form);
+  useForm(form: HTMLFormElement) {
 
-    data.forEach((item, name) => this.#payload[name as keyof P] = item as P[keyof P]);
+    const data = new FormData(form)
+
+    this.#transpilate = false;
+
+    this.#payload = data;
 
     return this;
 
   }
+
+
+  useFormData(formData: FormData) {
+
+    this.#transpilate = false;
+
+    this.#payload = formData;
+
+    return this;
+
+  }
+
 
   slugs(...slugs: (string | number)[]) {
 
@@ -144,15 +162,6 @@ export class AirRestEndPoint<P extends IEndpointPayload, R extends IEndpointResp
     return this;
 
   }
-
-  // response( response : R ){
-
-  //     this.#response = response;
-
-  //     return this;
-
-  // }
-
 
   send(): Promise<R> | undefined {
 
@@ -209,22 +218,6 @@ export class AirRestServer implements IAirRestServer {
 
   }
 
-  post<R extends IEndpointResponse>(endpoint: IAirRestEndPoint<IEndpointPayload, R>): Promise<R> {
-
-    return render<R>(
-
-      `${this.server}${endpoint._route as string}`, {
-
-      method: 'POST',
-
-      body: transpilatePayload(endpoint._payload),
-
-    }
-
-    )
-
-  }
-
   get<R extends IEndpointResponse>(endpoint: IAirRestEndPoint<IEndpointPayload, R>) {
 
     const query = endpoint._payload ? stringifyPayload(endpoint._payload).join('&') : '';
@@ -243,6 +236,22 @@ export class AirRestServer implements IAirRestServer {
 
   }
 
+  post<R extends IEndpointResponse>(endpoint: IAirRestEndPoint<IEndpointPayload, R>): Promise<R> {
+
+    return render<R>(
+
+      `${this.server}${endpoint._route as string}`, {
+
+      method: 'POST',
+
+      body: endpoint._transpilate ? transpilatePayload(endpoint._payload) : (endpoint._payload as BodyInit),
+
+    }
+
+    )
+
+  }
+
   put<R extends IEndpointResponse>(endpoint: IAirRestEndPoint<IEndpointPayload, R>) {
 
     return render<R>(
@@ -253,7 +262,7 @@ export class AirRestServer implements IAirRestServer {
 
       method: 'PUT',
 
-      body: transpilatePayload(endpoint._payload),
+      body: endpoint._transpilate ? transpilatePayload(endpoint._payload) : (endpoint._payload as BodyInit),
 
     }
 
@@ -271,7 +280,7 @@ export class AirRestServer implements IAirRestServer {
 
       method: 'PATCH',
 
-      body: transpilatePayload(endpoint._payload),
+      body: endpoint._transpilate ? transpilatePayload(endpoint._payload) : (endpoint._payload as BodyInit),
 
     }
 
@@ -289,7 +298,7 @@ export class AirRestServer implements IAirRestServer {
 
       method: 'DELETE',
 
-      body: transpilatePayload(endpoint._payload),
+      body: endpoint._transpilate ? transpilatePayload(endpoint._payload) : (endpoint._payload as BodyInit),
 
     })
 

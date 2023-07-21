@@ -9,7 +9,7 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var _AirRestEndPoint_rest, _AirRestEndPoint_route, _AirRestEndPoint_payload, _AirRestEndPoint_method;
+var _AirRestEndPoint_rest, _AirRestEndPoint_route, _AirRestEndPoint_payload, _AirRestEndPoint_method, _AirRestEndPoint_transpilate;
 export function stringifyPayload(payload) {
     const out = [];
     Object.entries(payload).forEach(({ 0: key, 1: value }) => {
@@ -41,13 +41,13 @@ export class AirRestEndPoint {
         _AirRestEndPoint_rest.set(this, undefined);
         _AirRestEndPoint_route.set(this, '');
         _AirRestEndPoint_payload.set(this, {});
-        // #response: R = {} as R;
         _AirRestEndPoint_method.set(this, 'GET');
+        _AirRestEndPoint_transpilate.set(this, true);
     }
     get _route() { return __classPrivateFieldGet(this, _AirRestEndPoint_route, "f"); }
     get _payload() { return __classPrivateFieldGet(this, _AirRestEndPoint_payload, "f"); }
-    // get _responses(){ return this.#response; }
     get _method() { return __classPrivateFieldGet(this, _AirRestEndPoint_method, "f"); }
+    get _transpilate() { return __classPrivateFieldGet(this, _AirRestEndPoint_transpilate, "f"); }
     /**
      * Utilisation avec un serveur de points de chutes
      * @param rest
@@ -64,9 +64,15 @@ export class AirRestEndPoint {
         __classPrivateFieldSet(this, _AirRestEndPoint_route, route, "f");
         return this;
     }
-    form(form) {
+    useForm(form) {
         const data = new FormData(form);
-        data.forEach((item, name) => __classPrivateFieldGet(this, _AirRestEndPoint_payload, "f")[name] = item);
+        __classPrivateFieldSet(this, _AirRestEndPoint_transpilate, false, "f");
+        __classPrivateFieldSet(this, _AirRestEndPoint_payload, data, "f");
+        return this;
+    }
+    useFormData(formData) {
+        __classPrivateFieldSet(this, _AirRestEndPoint_transpilate, false, "f");
+        __classPrivateFieldSet(this, _AirRestEndPoint_payload, formData, "f");
         return this;
     }
     slugs(...slugs) {
@@ -80,10 +86,6 @@ export class AirRestEndPoint {
         __classPrivateFieldSet(this, _AirRestEndPoint_payload, payload, "f");
         return this;
     }
-    // response( response : R ){
-    //     this.#response = response;
-    //     return this;
-    // }
     send() {
         switch (this._method) {
             case 'POST': return __classPrivateFieldGet(this, _AirRestEndPoint_rest, "f")?.post(this);
@@ -94,7 +96,7 @@ export class AirRestEndPoint {
         }
     }
 }
-_AirRestEndPoint_rest = new WeakMap(), _AirRestEndPoint_route = new WeakMap(), _AirRestEndPoint_payload = new WeakMap(), _AirRestEndPoint_method = new WeakMap();
+_AirRestEndPoint_rest = new WeakMap(), _AirRestEndPoint_route = new WeakMap(), _AirRestEndPoint_payload = new WeakMap(), _AirRestEndPoint_method = new WeakMap(), _AirRestEndPoint_transpilate = new WeakMap();
 export function transpilatePayload(payload) {
     const formData = new FormData();
     if (payload) {
@@ -107,12 +109,6 @@ export class AirRestServer {
         this.server = server;
         this.options = options;
     }
-    post(endpoint) {
-        return render(`${this.server}${endpoint._route}`, {
-            method: 'POST',
-            body: transpilatePayload(endpoint._payload),
-        });
-    }
     get(endpoint) {
         const query = endpoint._payload ? stringifyPayload(endpoint._payload).join('&') : '';
         return render(`${this.server}${endpoint._route}${endpoint._payload ? "?" + query : ''}`, {
@@ -120,25 +116,31 @@ export class AirRestServer {
             method: 'GET',
         });
     }
+    post(endpoint) {
+        return render(`${this.server}${endpoint._route}`, {
+            method: 'POST',
+            body: endpoint._transpilate ? transpilatePayload(endpoint._payload) : endpoint._payload,
+        });
+    }
     put(endpoint) {
         return render(`${this.server}${endpoint._route}`, {
             ...this.options,
             method: 'PUT',
-            body: transpilatePayload(endpoint._payload),
+            body: endpoint._transpilate ? transpilatePayload(endpoint._payload) : endpoint._payload,
         });
     }
     patch(endpoint) {
         return render(`${this.server}${endpoint._route}`, {
             ...this.options,
             method: 'PATCH',
-            body: transpilatePayload(endpoint._payload),
+            body: endpoint._transpilate ? transpilatePayload(endpoint._payload) : endpoint._payload,
         });
     }
     delete(endpoint) {
         return render(`${this.server}${endpoint._route}`, {
             ...this.options,
             method: 'DELETE',
-            body: transpilatePayload(endpoint._payload),
+            body: endpoint._transpilate ? transpilatePayload(endpoint._payload) : endpoint._payload,
         });
     }
 }
