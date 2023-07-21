@@ -64,6 +64,11 @@ export class AirRestEndPoint {
         __classPrivateFieldSet(this, _AirRestEndPoint_route, route, "f");
         return this;
     }
+    form(form) {
+        const data = new FormData(form);
+        data.forEach((item, name) => __classPrivateFieldGet(this, _AirRestEndPoint_payload, "f")[name] = item);
+        return this;
+    }
     slugs(...slugs) {
         slugs.forEach((slug, key) => {
             key++;

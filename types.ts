@@ -24,6 +24,8 @@ export declare interface IAirRestEndPoint<P extends IEndpointPayload, R extends 
 
 	send(): Promise<R> | undefined;
 
+	form(form: HTMLFormElement): this
+
 }
 
 export declare type IEndpointResponse = {

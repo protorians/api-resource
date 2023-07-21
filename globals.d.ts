@@ -22,6 +22,7 @@ declare module '@protorians/air-rest/index' {
       use(rest: IAirRestServer): this;
       method(method: IAirMethods): this;
       route(route: string | number): this;
+      form(form: HTMLFormElement): this;
       slugs(...slugs: (string | number)[]): this;
       payload(payload: P): this;
       send(): Promise<R> | undefined;
@@ -55,6 +56,7 @@ declare module '@protorians/air-rest/types' {
       slugs(...slugs: (string | number)[]): this;
       payload(payload: P): this;
       send(): Promise<R> | undefined;
+      form(form: HTMLFormElement): this;
   }
   export type IEndpointResponse = {
       [R: string]: any;

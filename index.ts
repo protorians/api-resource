@@ -113,6 +113,16 @@ export class AirRestEndPoint<P extends IEndpointPayload, R extends IEndpointResp
 
   }
 
+  form(form: HTMLFormElement) {
+
+    const data = new FormData(form);
+
+    data.forEach((item, name) => this.#payload[name as keyof P] = item as P[keyof P]);
+
+    return this;
+
+  }
+
   slugs(...slugs: (string | number)[]) {
 
     slugs.forEach((slug, key) => {
